@@ -1,8 +1,8 @@
-import * as express from 'express';
+const express = require('express');
 import colors from 'colors';
 import * as dotenv from 'dotenv';
-dotenv.config({path:__dirname+'/env'});
-console.log(process.env)
+dotenv.config({path:__dirname+'/.env'});
+console.log(process.env.Mongo_URL);
 const app = express();
 import {dbConnect} from './config/dbConnect';
 const port = process.env.PORT || 8000;
