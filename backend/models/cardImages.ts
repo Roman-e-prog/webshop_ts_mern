@@ -6,7 +6,6 @@ export interface CardImagesDocument extends mongoose.Document{
     img:string;
     createdAt: Date;
     updatedAt: Date;
-    _doc?: any;
   }
 const CardImagesSchema = new mongoose.Schema<CardImagesDocument>({
     name:{type:String, required:true},
