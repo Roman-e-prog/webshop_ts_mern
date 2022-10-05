@@ -1,12 +1,12 @@
 import mongoose from 'mongoose';
-export interface SliderItemDocument extends mongoose.Document{
+export interface SliderItemsDocument extends mongoose.Document{
     img:string;
     alt:string;
     title:string;
     createdAt: Date;
     updatedAt: Date;
   };
-  const SliderItemSchema = new mongoose.Schema<SliderItemDocument>({
+  const SliderItemsSchema = new mongoose.Schema<SliderItemsDocument>({
     img:{type:String, required:true},
     alt:{type:String, required:true},
     title:{type:String, required:true},
@@ -14,6 +14,6 @@ export interface SliderItemDocument extends mongoose.Document{
   },
   {timestamps:true},
   );
-  const SliderItem = mongoose.model<SliderItemDocument>("SliderItem", SliderItemSchema);
+  const SliderItems = mongoose.model<SliderItemsDocument>("SliderItems", SliderItemsSchema);
 
-  export default SliderItem;
+  export default SliderItems;
