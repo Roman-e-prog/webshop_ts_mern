@@ -24,6 +24,8 @@ import * as productsMenRoute from './routes/ProductsMen';
 import * as productsSneakerRoute from './routes/ProductsSneaker';
 import * as productsSportschuheRoute from './routes/ProductsSportschuhe';
 import * as productsWomenRoute from './routes/ProductsWomen';
+import * as sliderItemsRoute from './routes/SliderItems';
+import * as sneakerImageRoute from './routes/SneakerImage';
 dbConnect();
 
 app.use(cors());
@@ -46,6 +48,8 @@ app.use('/api/productsMen', productsMenRoute);
 app.use('/api/productsSneaker', productsSneakerRoute);
 app.use('/api/productsSportschuhe', productsSportschuheRoute);
 app.use('/api/productsWomen', productsWomenRoute);
+app.use('/api/sliderItems', sliderItemsRoute);
+app.use('/api/sneakerImage', sneakerImageRoute);
 
 app.use(express.static(path.resolve(process.cwd(),'/frontend/public' )))
 app.listen(port, ()=>{
