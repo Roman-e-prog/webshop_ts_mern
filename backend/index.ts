@@ -14,6 +14,8 @@ import * as userRoute from './routes/User'
 import * as cardImagesRoute from './routes/CardImages';
 import * as descriptionItemRoute from './routes/DescriptionItems';
 import * as newsletterBackgroundRoute from './routes/NewsletterBackground';
+import * as productListChildRoute from './routes/ProductListChild';
+import * as productListMenRoute from './routes/ProductListMen';
 dbConnect();
 
 app.use(cors());
@@ -26,6 +28,8 @@ app.use('/api/user', userRoute);
 app.use('/api/cardImages', cardImagesRoute);
 app.use('/api/descriptionItem', descriptionItemRoute);
 app.use('/api/newsletterBackground', newsletterBackgroundRoute);
+app.use('/api/productListChild', productListChildRoute);
+app.use('/api/productListMen', productListMenRoute);
 app.use(express.static(path.resolve(process.cwd(),'/frontend/public' )))
 app.listen(port, ()=>{
     console.log(`Server is running on port: ${port}`)
