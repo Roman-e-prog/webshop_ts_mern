@@ -10,7 +10,9 @@ import cors from 'cors';
 import {errorHandler} from './middleware/errorMiddleware';
 import path from 'path';
 import * as authRoute from './routes/Auth';
+import * as userRoute from './routes/User'
 import * as cardImagesRoute from './routes/CardImages';
+import * as descriptionItemRoute from './routes/DescriptionItems'
 dbConnect();
 
 app.use(cors());
@@ -19,7 +21,9 @@ app.use(express.urlencoded({extended:true}));
 app.use(errorHandler);
 
 app.use('/api/auth', authRoute);
+app.use('/api/user', userRoute);
 app.use('/api/cardImages', cardImagesRoute);
+app.use('/api/descriptionItem', descriptionItemRoute);
 
 app.use(express.static(path.resolve(process.cwd(),'/frontend/public' )))
 app.listen(port, ()=>{
