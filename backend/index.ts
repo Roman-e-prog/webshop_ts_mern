@@ -19,6 +19,11 @@ import * as productListMenRoute from './routes/ProductListMen';
 import * as productListSneakerRoute from './routes/ProductListSneaker';
 import * as productListSportschuheRoute from './routes/ProductListSportschuhe';
 import * as productListWomenRoute from './routes/ProductListWomen';
+import * as productsChildRoute from './routes/ProductsChild';
+import * as productsMenRoute from './routes/ProductsMen';
+import * as productsSneakerRoute from './routes/ProductsSneaker';
+import * as productsSportschuheRoute from './routes/ProductsSportschuhe';
+import * as productsWomenRoute from './routes/ProductsWomen';
 dbConnect();
 
 app.use(cors());
@@ -36,6 +41,11 @@ app.use('/api/productListMen', productListMenRoute);
 app.use('/api/productListSneaker', productListSneakerRoute);
 app.use('/api/productListSportschuhe', productListSportschuheRoute);
 app.use('/api/productListWomen', productListWomenRoute);
+app.use('/api/productsChild', productsChildRoute);
+app.use('/api/productsMen', productsMenRoute);
+app.use('/api/productsSneaker', productsSneakerRoute);
+app.use('/api/productsSportschuhe', productsSportschuheRoute);
+app.use('/api/productsWomen', productsWomenRoute);
 
 app.use(express.static(path.resolve(process.cwd(),'/frontend/public' )))
 app.listen(port, ()=>{
