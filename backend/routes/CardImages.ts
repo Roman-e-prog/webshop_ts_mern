@@ -55,3 +55,5 @@ cardImageRouter.get('/find', async (req:Request, res:Response)=>{
     }
 })
 
+export default cardImageRouter;
+
