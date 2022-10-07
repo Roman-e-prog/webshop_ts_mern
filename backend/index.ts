@@ -48,7 +48,7 @@ app.use('/api/productsMen', productsMenRoute);
 app.use('/api/productsSneaker', productsSneakerRoute);
 app.use('/api/productsSportschuhe', productsSportschuheRoute);
 app.use('/api/productsWomen', productsWomenRoute);
-app.use('/api/sliderItems', sliderItemsRoute);
+app.use('/api/sliderItem', sliderItemsRoute);
 app.use('/api/sneakerImage', sneakerImageRoute);
 
 app.use(express.static(path.resolve(process.cwd(),'/frontend/public' )))
