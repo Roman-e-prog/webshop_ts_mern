@@ -5,7 +5,6 @@ export const dbConnect = async ()=>{
           throw new Error('mongo url not defined')
         }
         const conn = await mongoose.connect(process.env.MONGO_URL);
-        console.log(conn.connection.host);
         console.log(`MongoDb successfull connected with: ${conn.connection.host}`);
         
     }
