@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+import mongoose, { Types } from 'mongoose';
 
 export interface UserDocument extends mongoose.Document{
     vorname:string;
@@ -14,6 +14,7 @@ export interface UserDocument extends mongoose.Document{
     createdAt: Date;
     updatedAt: Date;
     _doc?: any;
+    organization: Types.ObjectId;
   }
 const UserSchema = new mongoose.Schema<UserDocument>({
     vorname:{type:String, required:true},
@@ -26,6 +27,7 @@ const UserSchema = new mongoose.Schema<UserDocument>({
     city:{type:String, required:true },
     password:{type:String, required:true },
     isAdmin:{type:Boolean, default:false},
+    organization: { type: mongoose.Schema.Types.ObjectId, ref: 'Organization' }
 }, 
     {timestamps:true}
 )
