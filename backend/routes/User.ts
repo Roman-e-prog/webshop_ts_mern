@@ -1,17 +1,9 @@
 import { Router, Request, Response } from "express";
 const userRouter = Router();
 import User from '../models/user';
-import * as CryptoJS from 'crypto-js';
 import {verifyToken, verifyTokenAndAuthorization, verifyTokenAndAdmin} from '../middleware/jwtVerify';
 
 userRouter.put('/:id', verifyTokenAndAuthorization, async (req:Request, res:Response)=>{
-    const pass_sec = process.env.PASS_SEC as string;
-    if(req.body.password){
-        req.body.password = CryptoJS.AES.encrypt(
-            req.body.password,
-            pass_sec,
-        ).toString();
-    }
     try{
     const updatedUser = await User.findByIdAndUpdate(req.params.id,{
         $set: req.body,
@@ -49,5 +41,5 @@ userRouter.get('/find', verifyTokenAndAdmin, async (req:Request, res:Response)=>
 });
 //
 
-
+export default userRouter;
 
