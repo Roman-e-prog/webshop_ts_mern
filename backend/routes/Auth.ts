@@ -3,8 +3,12 @@ const authRouter = Router();
 const CryptoJS = require('crypto-js');
 import * as jwt from 'jsonwebtoken';
 import User from "../models/user";
+import bcrypt from 'bcrypt';
+
 //register
 authRouter.post('/register', async (request:Request, response:Response)=>{
+    const salt = bcrypt.genSaltSync(10);
+    const hash = bcrypt.hashSync(request.body.password, salt);
     const newUser = new User({
         vorname:request.body.vorname,
         nachname:request.body.nachname,
@@ -14,10 +18,11 @@ authRouter.post('/register', async (request:Request, response:Response)=>{
         number:request.body.number,
         plz:request.body.plz,
         city:request.body.city,
-        password: CryptoJS.AES.encrypt(
-            request.body.password,
-            process.env.PASS_SEC
-        ).toString(),
+        password: hash
+        // CryptoJS.AES.encrypt(
+        //     request.body.password,
+        //     process.env.PASS_SEC
+        // ).toString(),
     });
     try{
         const savedUser = await newUser.save();
@@ -33,11 +38,24 @@ authRouter.post('/login', async (request:Request, response:Response)=>{
     let sec:string = process.env.JWT_SEC as string;
     try{
         const user = await User.findOne({username:request.body.username});
-        !user && response.status(401).json("Falsche Eingabe");
-        const hashedPassword = CryptoJS.AES.decrypt(user?.password, process.env.PASS_SEC);
-        const originalPassword = hashedPassword.toString(CryptoJS.enc.UTF8);
-        originalPassword !== request.body.password && response.status(401).json("Falsches Passwort")
 
+        if(!user){
+            return response.status(401).json("Falsche Eingabe");
+        }
+        const isPasswordCorrect = await bcrypt.compare(
+            request.body.password,
+            user.password
+          );
+        // const hashedPassword = CryptoJS.AES.decrypt(user?.password, process.env.PASS_SEC);
+        // console.log(hashedPassword);
+        // const originalPassword = hashedPassword.toString(CryptoJS.enc.UTF8);
+        // console.log(originalPassword);
+        // const inputPassword = request.body.password;
+        // console.log(inputPassword);
+        
+        if(!isPasswordCorrect){
+            return response.status(401).json("Falsches Passwort");
+        } else {
         const accessToken = jwt.sign(
             {id: user!._id,
              isAdmin:user!.isAdmin,
@@ -47,6 +65,7 @@ authRouter.post('/login', async (request:Request, response:Response)=>{
         )
         const {password, ...others} = user?._doc;
         response.status(200).json({...others, accessToken});
+        }
     } catch(error:any){
         response.status(401)
         throw new Error(error)
