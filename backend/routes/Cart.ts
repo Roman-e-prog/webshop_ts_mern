@@ -46,3 +46,4 @@ cartRouter.get('/', verifyTokenAndAdmin, async (req:Request, res:Response)=>{
         res.status(404).json("Not found");
     }
 })
+export default cartRouter;
