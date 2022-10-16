@@ -44,7 +44,7 @@ cardImageRouter.get('/find/:id', async (req:Request, res:Response)=>{
         throw new Error("Nicht gefunden");
     }
 });
-//get
+//getall
 cardImageRouter.get('/find', async (req:Request, res:Response)=>{
     try{
         const allCardImages = await CardImages.find();
