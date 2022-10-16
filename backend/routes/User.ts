@@ -32,14 +32,37 @@ userRouter.get('/find/:id', verifyTokenAndAuthorization, async (req:Request, res
     }
 })
 userRouter.get('/find', verifyTokenAndAdmin, async (req:Request, res:Response)=>{
+    const query = req.query.new;
     try{
-        const allUsers = await User.find();
+        const allUsers = query ? await User.find().sort({_id: - 1}).limit(5) : await User.find();
         res.status(200).json(allUsers)
     } catch(error){
         res.status(404).json("Benutzer nicht gefunden");
     }
 });
-//
+//stats user per month
+userRouter.get('/stats', verifyTokenAndAdmin, async (req:Request, res:Response)=>{
+    const date = new Date();
+    const lastyear = new Date(date.setFullYear(date.getFullYear()-1));
+    try{
+        const data = await User.aggregate([
+            {$match: {createdAt: {$gte: lastyear } } },
+            {
+                $project:{
+                    month:{ $month:"$createdAt"},
+                },
+            },
+            {$group:
+                {_id: "$month", 
+                total:{$sum:1}
+                },
+            },
+        ]);
+        res.status(200).json(data);
+    } catch(error){
+        res.status(403).json(error);
+    }
+})
 
 export default userRouter;
 
