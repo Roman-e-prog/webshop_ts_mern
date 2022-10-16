@@ -46,10 +46,20 @@ productsChildRouter.get('/find/:id', async (req:Request, res:Response)=>{
     }
 });
 //get All
-productsChildRouter.get('/find', async (req:Request, res:Response)=>{
+productsChildRouter.get('/', async (req:Request, res:Response)=>{
+    const qnew = req.query.new;
+    const qCategory = req.query.category;
     try{
-        const allproductsChild = await ProductsChild.find();
-        res.status(200).json(allproductsChild)
+        let productsChild;
+        if(qnew){
+            productsChild = await ProductsChild.find().sort({createdAt:-1}).limit(1);
+        } else if(qCategory){
+            productsChild = await ProductsChild.find({categories:{$in:[qCategory]}})
+        } else{
+            productsChild = await ProductsChild.find();
+        }
+        
+        res.status(200).json(productsChild);
     } catch(error){
         res.status(404)
         throw new Error("Nicht gefunden");
