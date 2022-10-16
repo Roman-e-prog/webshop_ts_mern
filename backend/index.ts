@@ -26,6 +26,8 @@ import productsSportschuheRouter from './routes/ProductsSportschuhe';
 import productsWomenRouter from './routes/ProductsWomen';
 import sliderItemsRouter from './routes/SliderItems';
 import sneakerImageRouter from './routes/SneakerImage';
+import cartRouter from './routes/Cart';
+import orderRouter from './routes/Order';
 const routes = Router();
 dbConnect();
 
@@ -51,6 +53,8 @@ routes.use('/api/productsSportschuhe', productsSportschuheRouter);
 routes.use('/api/productsWomen', productsWomenRouter);
 routes.use('/api/sliderItem', sliderItemsRouter);
 routes.use('/api/sneakerImage', sneakerImageRouter);
+routes.use('/api/cart', cartRouter);
+routes.use('/api/order', orderRouter);
 app.use(routes);
 app.use(express.static(path.resolve(process.cwd(),'/frontend/public' )))
 app.listen(port, ()=>{
