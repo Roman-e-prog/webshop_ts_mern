@@ -46,10 +46,20 @@ productsSneakerRouter.get('/find/:id', async (req:Request, res:Response)=>{
     }
 });
 //get All
-productsSneakerRouter.get('/find', async (req:Request, res:Response)=>{
+productsSneakerRouter.get('/', async (req:Request, res:Response)=>{
+    const qnew = req.query.new;
+    const qCategory = req.query.category;
     try{
-        const allproductsSneaker = await ProductsSneaker.find();
-        res.status(200).json(allproductsSneaker)
+        let productsSneaker;
+        if(qnew){
+            productsSneaker = await ProductsSneaker.find().sort({createdAt:-1}).limit(1);
+        } else if(qCategory){
+            productsSneaker = await ProductsSneaker.find({categories:{$in:[qCategory]}})
+        } else{
+            productsSneaker = await ProductsSneaker.find();
+        }
+        
+        res.status(200).json(productsSneaker);
     } catch(error){
         res.status(404)
         throw new Error("Nicht gefunden");
