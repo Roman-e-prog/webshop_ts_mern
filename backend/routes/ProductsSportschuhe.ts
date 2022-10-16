@@ -46,10 +46,20 @@ productsSportschuheRouter.get('/find/:id', async (req:Request, res:Response)=>{
     }
 });
 //get All
-productsSportschuheRouter.get('/find', async (req:Request, res:Response)=>{
+productsSportschuheRouter.get('/', async (req:Request, res:Response)=>{
+    const qnew = req.query.new;
+    const qCategory = req.query.category;
     try{
-        const allproductsSportschuhe = await ProductsSportschuhe.find();
-        res.status(200).json(allproductsSportschuhe)
+        let productsSportschuhe;
+        if(qnew){
+            productsSportschuhe = await ProductsSportschuhe.find().sort({createdAt:-1}).limit(1);
+        } else if(qCategory){
+            productsSportschuhe = await ProductsSportschuhe.find({categories:{$in:[qCategory]}})
+        } else{
+            productsSportschuhe = await ProductsSportschuhe.find();
+        }
+        
+        res.status(200).json(productsSportschuhe);
     } catch(error){
         res.status(404)
         throw new Error("Nicht gefunden");
