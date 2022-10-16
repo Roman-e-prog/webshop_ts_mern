@@ -4,7 +4,6 @@ import { Request, Response, NextFunction } from 'express';
 export const verifyToken = (req:Request, res:Response, next:NextFunction)=>{
     const sec:string = process.env.JWT_SEC as string;
     const authHeader = req.headers.token;
-    console.log(authHeader);
     if(authHeader){
         const token = (authHeader as string).split(' ')[1];
         jwt.verify(token, sec, async (err, user)=>{
@@ -12,7 +11,6 @@ export const verifyToken = (req:Request, res:Response, next:NextFunction)=>{
                 res.status(403).json('Token not valid');
             }
             if(!user) return res.status(400).json({error:"Not authorized"})
-            console.log(user, req.user);
             if(user){
                req.user = <any>user;
             }
