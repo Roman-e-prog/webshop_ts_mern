@@ -26,7 +26,7 @@ const OrderSchema = new mongoose.Schema<OrderDocument>({
     status:{type:String, required:true, default:"pending"}
 },
 {timestamps:true}
-)
+);
 const Order = mongoose.model<OrderDocument>("Order", OrderSchema);
 
 export default Order;
