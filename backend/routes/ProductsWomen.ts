@@ -46,10 +46,20 @@ productsWomenRouter.get('/find/:id', async (req:Request, res:Response)=>{
     }
 });
 //get All
-productsWomenRouter.get('/find', async (req:Request, res:Response)=>{
+productsWomenRouter.get('/', async (req:Request, res:Response)=>{
+    const qnew = req.query.new;
+    const qCategory = req.query.category;
     try{
-        const allproductsWomen = await ProductsWomen.find();
-        res.status(200).json(allproductsWomen)
+        let productsWomen;
+        if(qnew){
+            productsWomen = await ProductsWomen.find().sort({createdAt:-1}).limit(1);
+        } else if(qCategory){
+            productsWomen = await ProductsWomen.find({categories:{$in:[qCategory]}})
+        } else{
+            productsWomen = await ProductsWomen.find();
+        }
+        
+        res.status(200).json(productsWomen);
     } catch(error){
         res.status(404)
         throw new Error("Nicht gefunden");
