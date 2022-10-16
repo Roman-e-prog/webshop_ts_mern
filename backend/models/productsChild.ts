@@ -1,10 +1,10 @@
 import mongoose from 'mongoose';
 interface ProductsChildDocument extends mongoose.Document{
     img:string,
-    cloudinary_id:string,
+    // cloudinary_id:string,
     title:string,
     producer:string,
-    category:string,
+    categories:string[];
     desc:string,
     price:number,
     currency:string,
@@ -16,10 +16,10 @@ interface ProductsChildDocument extends mongoose.Document{
 }
 const ProductsChildSchema = new mongoose.Schema<ProductsChildDocument>({
     img:{type:String, required:true},
-    cloudinary_id:{type:String, required:true},
+    // cloudinary_id:{type:String, required:true},
     title:{type:String, required:true},
     producer:{type:String, required:true},
-    category:{type:String, required:true},
+    categories:{type:[String]},
     desc:{type:String, required:true},
     price:{type:Number, required:true},
     currency:{type:String, required:true, default:"€"},
