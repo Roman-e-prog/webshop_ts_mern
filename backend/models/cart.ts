@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 export interface CartDocument extends mongoose.Document{
     userId:string;
-    products:[string,number];
+    products:[{}];
     createdAt: Date;
     updatedAt: Date;
   };
