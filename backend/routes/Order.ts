@@ -56,8 +56,8 @@ orderRouter.get('/income', verifyTokenAndAdmin, async (req:Request, res:Response
         const income = await Order.aggregate([
             {$match:{createdAt:{$gte: previousMonth}}},
             {$project: {
-                month: "$month",
-                total:{$sum: "$sales"}
+                month: {$month: "$createdAt"},
+                sales: "$amount"
             }},
             {$group: {
                 _id: "$month",
