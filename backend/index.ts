@@ -28,6 +28,7 @@ import sliderItemsRouter from './routes/SliderItems';
 import sneakerImageRouter from './routes/SneakerImage';
 import cartRouter from './routes/Cart';
 import orderRouter from './routes/Order';
+import stripeRouter from './routes/Stripe';
 const routes = Router();
 dbConnect();
 
@@ -55,6 +56,7 @@ routes.use('/api/sliderItem', sliderItemsRouter);
 routes.use('/api/sneakerImage', sneakerImageRouter);
 routes.use('/api/cart', cartRouter);
 routes.use('/api/order', orderRouter);
+routes.use('api/checkout', stripeRouter);
 app.use(routes);
 app.use(express.static(path.resolve(process.cwd(),'/frontend/public' )))
 app.listen(port, ()=>{
