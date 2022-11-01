@@ -7,7 +7,7 @@ export interface UserDocument extends mongoose.Document{
     email:string;
     street:string;
     number:string;
-    plz:number;
+    plz:string;
     city:string;
     password:string;
     isAdmin:boolean;
@@ -23,7 +23,7 @@ const UserSchema = new mongoose.Schema<UserDocument>({
     email:{type:String, required:true },
     street:{type:String, required:true },
     number:{type:String, required:true },
-    plz:{type:Number, required:true },
+    plz:{type:String, required:true },
     city:{type:String, required:true },
     password:{type:String, required:true },
     isAdmin:{type:Boolean, default:false},
