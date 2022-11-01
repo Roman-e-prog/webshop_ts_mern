@@ -7,12 +7,13 @@ export interface User {
     email:string!;
     street:string!;
     number:string!;
-    plz:number!;
+    plz:string!;
     city:string!;
     password:string!;
     isAdmin:boolean!;
     createdAt: Date!;
     updatedAt: Date!;
+    accessToken:String!;
   }
 declare global {
     namespace Express {
