@@ -66,4 +66,4 @@ authRouter.post('/login', async (request:Request, response:Response)=>{
     }
 });
 
-export default authRouter;j
+export default authRouter;
