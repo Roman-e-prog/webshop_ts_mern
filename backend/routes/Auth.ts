@@ -46,12 +46,6 @@ authRouter.post('/login', async (request:Request, response:Response)=>{
             request.body.password,
             user.password
           );
-        // const hashedPassword = CryptoJS.AES.decrypt(user?.password, process.env.PASS_SEC);
-        // console.log(hashedPassword);
-        // const originalPassword = hashedPassword.toString(CryptoJS.enc.UTF8);
-        // console.log(originalPassword);
-        // const inputPassword = request.body.password;
-        // console.log(inputPassword);
         
         if(!isPasswordCorrect){
             return response.status(401).json("Falsches Passwort");
@@ -72,4 +66,4 @@ authRouter.post('/login', async (request:Request, response:Response)=>{
     }
 });
 
-export default authRouter; 
+export default authRouter;j
