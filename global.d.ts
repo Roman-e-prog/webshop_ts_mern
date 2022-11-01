@@ -8,16 +8,23 @@ export interface User {
   email:string!;
   street:string!;
   number:string!;
-  plz:number!;
+  plz:string!;
   city:string!;
   password:string!;
   isAdmin:boolean!;
   createdAt: Date!;
   updatedAt: Date!;
+  accessToken:String!;
 }
-
-declare module 'express' {
-  export interface Request {
-    user?: User
+declare global {
+  namespace Express {
+      interface Request {
+          user: User;
+      }
   }
 }
+// declare module 'express' {
+//   export interface Request {
+//     user?: User
+//   }
+// }
