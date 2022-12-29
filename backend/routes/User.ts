@@ -1,4 +1,4 @@
-import { Router, Request, Response } from "express";
+import { Router, Request, Response} from "express";
 const userRouter = Router();
 import User from '../models/user';
 import {verifyToken, verifyTokenAndAuthorization, verifyTokenAndAdmin} from '../middleware/jwtVerify';
@@ -34,8 +34,8 @@ userRouter.get('/find/:id', verifyTokenAndAuthorization, async (req:Request, res
 userRouter.get('/find', verifyTokenAndAdmin, async (req:Request, res:Response)=>{
     const query = req.query.new;
     try{
-        const allUsers = query ? await User.find().sort({_id: - 1}).limit(5) : await User.find();
-        res.status(200).json(allUsers)
+        const allUsers = await User.find();
+        res.status(200).json(allUsers);
     } catch(error){
         res.status(404).json("Benutzer nicht gefunden");
     }
