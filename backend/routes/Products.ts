@@ -2,34 +2,91 @@ import {Router, Request, Response} from 'express';
 const productsRouter = Router();
 import {verifyTokenAndAdmin} from '../middleware/jwtVerify';
 import Products from '../models/products';
-
-productsRouter.post('/', verifyTokenAndAdmin, async (req:Request, res:Response)=>{
-    const newproducts = new Products(req.body);
+import upload from '../utils/multer';
+const cloudinary = require('../utils/cloudinary');
+import path from 'path'
+productsRouter.post('/', upload.single('image'), verifyTokenAndAdmin, async (req:Request, res:Response)=>{
+    console.log(req.file);
+    console.log(req.body);
+    let fileUrl = req.file!.path.replace(/\\/g, "/");
+    console.log(fileUrl);
     try{
-        const savedproducts = await newproducts.save();
+        const uploadResult = await cloudinary.uploader.upload(fileUrl, {
+            upload_preset: "webshop_ts_mern",
+            resource_type: "auto",
+        })
+        
+        const newProducts = new Products({
+            cloudinary_id: uploadResult.public_id,
+            title: req.body.title,
+            producer: req.body.producer,
+            categories: JSON.parse(req.body.categories),
+            desc: req.body.desc,
+            price: req.body.price,
+            currency:req.body.currency,
+            colors:JSON.parse(req.body.colors),
+            sizes: JSON.parse(req.body.sizes),
+            inStock: req.body.inStock,
+            image: uploadResult.secure_url,
+
+        })
+        const savedproducts = await newProducts.save();
         res.status(200).json(savedproducts);
     } catch(error){
         res.status(403)
+        console.log(error);
         throw new Error("Action failed");
     }
 });
 //update
-productsRouter.put('/:id', verifyTokenAndAdmin, async (req:Request, res:Response)=>{
+productsRouter.put('/:id',upload.single("image"), verifyTokenAndAdmin, async (req:Request, res:Response)=>{
+    console.log(req.file);
+    console.log(req.body)
+
     try{
-        const updatedproducts = await Products.findByIdAndUpdate(req.params.id, {
-            $set: req.body,
-        }, {new:true})
-        res.status(200).json(updatedproducts);
+        let updatedProducts = await Products.findById(req.params.id);
+        if(req.file){
+        await cloudinary.uploader.destroy(updatedProducts?.cloudinary_id);
+        }
+       let result;
+        if(req.file){
+            let fileUrl = req.file!.path.replace(/\\/g, "/");
+        result = await cloudinary.uploader.upload(fileUrl, {
+            upload_preset: "webshop_ts_mern",
+            resource_type: "auto",
+        })
+        }
+        const updatedData = {
+            title: req.body.title || updatedProducts!.title,
+            producer: req.body.producer || updatedProducts!.producer,
+            categories: JSON.parse(req.body.categories) || updatedProducts!.categories,
+            desc: req.body.desc || updatedProducts!.desc,
+            price: req.body.price || updatedProducts!.price,
+            currency: req.body.currency || updatedProducts!.currency,
+            colors: JSON.parse(req.body.colors) || updatedProducts!.colors,
+            sizes: JSON.parse(req.body.sizes) || updatedProducts!.sizes,
+            inStock: req.body.inStock || updatedProducts!.inStock,
+            cloudinary_id: result ? result.public_id : updatedProducts!.cloudinary_id,
+            image: result ? result.secure_url : updatedProducts!.image,
+        }
+        console.log(updatedData);
+        updatedProducts = await Products.findByIdAndUpdate(req.params.id, updatedData, {
+            new:true,
+        })
+        res.status(200).json(updatedProducts);
     } catch(error){
         res.status(404)
-        throw new Error('Nicht gefunden')
+        console.log(error);
+        throw new Error('Not found')
     }
 });
 //delete
 productsRouter.delete('/:id', verifyTokenAndAdmin, async (req:Request, res:Response)=>{
     try{
-        await Products.findByIdAndDelete(req.params.id);
-        res.status(200).json("products wurde gelöscht");
+        let deleteProducts = await Products.findById(req.params.id);
+        await cloudinary.uploader.destroy(deleteProducts!.cloudinary_id);
+         await deleteProducts!.remove();
+        res.status(200).json("Produkt wurde gelöscht");
     } catch(error){
         res.status(404)
         throw new Error("Nicht gefunden")
@@ -46,20 +103,20 @@ productsRouter.get('/find/:id', async (req:Request, res:Response)=>{
     }
 });
 //get All
-productsRouter.get('/', async (req:Request, res:Response)=>{
-    const qnew = req.query.new;
-    const qCategory = req.query.category;
+productsRouter.get('/find/', async (req:Request, res:Response)=>{
+    // const qnew = req.query.new;
+    // const qCategory = req.query.category;
     try{
-        let products;
-        if(qnew){
-            products = await Products.find().sort({createdAt:-1}).limit(1);
-        } else if(qCategory){
-            products = await Products.find({categories:{$in:[qCategory]}})
-        } else{
-            products = await Products.find();
-        }
-        
-        res.status(200).json(products);
+        // let products;
+        // if(qnew){
+        //     products = await Products.find().sort({createdAt:-1}).limit(1);
+        // } else if(qCategory){
+        //     products = await Products.find({categories:{$in:[qCategory]}})
+        // } else{
+        //     products = await Products.find();
+        // }
+        const allProducts = await Products.find()
+        res.status(200).json(allProducts);
     } catch(error){
         res.status(404)
         throw new Error("Nicht gefunden");
