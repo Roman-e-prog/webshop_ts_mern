@@ -2,6 +2,7 @@ const express = require('express');
 import { Router } from 'express';
 import colors from 'colors';
 import * as dotenv from 'dotenv';
+const bodyParser = require('body-parser')
 dotenv.config({path:__dirname+'/.env'});
 const app = express();
 import {dbConnect} from './config/dbConnect';
@@ -30,7 +31,9 @@ dbConnect();
 
 app.use(cors());
 app.use(express.json());
+app.use(bodyParser.json())
 app.use(express.urlencoded({extended:true}));
+// app.use(multer());
 app.use(errorHandler);
 
 routes.use('/api/auth', authRouter);
@@ -50,7 +53,7 @@ routes.use('/api/cart', cartRouter);
 routes.use('/api/order', orderRouter);
 routes.use('api/checkout', stripeRouter);
 app.use(routes);
-app.use(express.static(path.resolve(process.cwd(),'/frontend/public' )))
+app.use(express.static(path.resolve(process.cwd(),'admin/public/' )))
 app.listen(port, ()=>{
     console.log(`Server is running on port: ${port}`)
 });
