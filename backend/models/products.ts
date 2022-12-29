@@ -1,12 +1,12 @@
 import mongoose from 'mongoose';
 interface ProductsDocument extends mongoose.Document{
-    img:string,
-    // cloudinary_id:string,
+    image:string,
+    cloudinary_id:string,
     title:string,
     producer:string,
     categories:string[];
     desc:string,
-    price:number,
+    price:string,
     currency:string,
     colors:string[],
     sizes:string[],
@@ -15,17 +15,17 @@ interface ProductsDocument extends mongoose.Document{
     updatedAt: Date;
 }
 const ProductsSchema = new mongoose.Schema<ProductsDocument>({
-    img:{type:String, required:true},
-    // cloudinary_id:{type:String, required:true},
+    cloudinary_id:{type:String, required:true},
     title:{type:String, required:true},
     producer:{type:String, required:true},
     categories:{type:[String]},
     desc:{type:String, required:true},
-    price:{type:Number, required:true},
+    price:{type:String, required:true},
     currency:{type:String, required:true, default:"€"},
     colors:{type:[String], required:true},
     sizes:{type:[String], required:true},
-    inStock:{type:Boolean, required:true, default:true}
+    inStock:{type:Boolean, required:true, default:true},
+    image:{type:String, required:true},
 },
 {timestamps:true}
 );
