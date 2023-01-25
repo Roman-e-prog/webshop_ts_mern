@@ -2,7 +2,7 @@ const express = require('express');
 import { Router } from 'express';
 import colors from 'colors';
 import * as dotenv from 'dotenv';
-const bodyParser = require('body-parser')
+// const bodyParser = require('body-parser')
 dotenv.config({path:__dirname+'/.env'});
 const app = express();
 import {dbConnect} from './config/dbConnect';
@@ -26,12 +26,12 @@ import sneakerImageRouter from './routes/SneakerImage';
 import cartRouter from './routes/Cart';
 import orderRouter from './routes/Order';
 import stripeRouter from './routes/Stripe';
+import newsletterOrderRouter from './routes/NewsletterOrder';
 const routes = Router();
 dbConnect();
-
 app.use(cors());
 app.use(express.json());
-app.use(bodyParser.json())
+// app.use(bodyParser.json())
 app.use(express.urlencoded({extended:true}));
 // app.use(multer());
 app.use(errorHandler);
@@ -51,7 +51,8 @@ routes.use('/api/sliderItem', sliderItemsRouter);
 routes.use('/api/sneakerImage', sneakerImageRouter);
 routes.use('/api/cart', cartRouter);
 routes.use('/api/order', orderRouter);
-routes.use('api/checkout', stripeRouter);
+routes.use('/api/checkout', stripeRouter);
+routes.use('/api/newsletterOrder', newsletterOrderRouter);
 app.use(routes);
 app.use(express.static(path.resolve(process.cwd(),'admin/public/' )))
 app.listen(port, ()=>{
