@@ -9,13 +9,17 @@ const CartSchema = new mongoose.Schema<CartDocument>({
     userId:{type:String, required:true},
     products:[
         {
-            productId:{
-                type:String,
-            },
-            quantity:{
-                type:String,
-                default:1
-            }
+            productId:{type:String, required:true},
+            image:{type:String, required:true},
+            title:{type:String, required:true},
+            producer:{type:String, required:true},
+            desc:{type:String, required:true},
+            price:{type:String, required:true},
+            currency:{type:String, required:true},
+            size:{type:String, required:true},
+            color:{type:String, required:true},
+            quantity:{type:Number,default:1},
+            
         }
     ]
 },
