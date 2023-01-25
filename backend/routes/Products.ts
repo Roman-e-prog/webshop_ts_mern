@@ -6,10 +6,7 @@ import upload from '../utils/multer';
 const cloudinary = require('../utils/cloudinary');
 import path from 'path'
 productsRouter.post('/', upload.single('image'), verifyTokenAndAdmin, async (req:Request, res:Response)=>{
-    console.log(req.file);
-    console.log(req.body);
-    let fileUrl = req.file!.path.replace(/\\/g, "/");
-    console.log(fileUrl);
+    let fileUrl = req.file?.path.replace(/\\/g, "/");
     try{
         const uploadResult = await cloudinary.uploader.upload(fileUrl, {
             upload_preset: "webshop_ts_mern",
@@ -20,12 +17,12 @@ productsRouter.post('/', upload.single('image'), verifyTokenAndAdmin, async (req
             cloudinary_id: uploadResult.public_id,
             title: req.body.title,
             producer: req.body.producer,
-            categories: JSON.parse(req.body.categories),
+            categories: JSON.parse(req.body.categories).split(' '),
             desc: req.body.desc,
             price: req.body.price,
             currency:req.body.currency,
-            colors:JSON.parse(req.body.colors),
-            sizes: JSON.parse(req.body.sizes),
+            colors:JSON.parse(req.body.colors).split(' '),
+            sizes: JSON.parse(req.body.sizes).split(' '),
             inStock: req.body.inStock,
             image: uploadResult.secure_url,
 
@@ -40,9 +37,6 @@ productsRouter.post('/', upload.single('image'), verifyTokenAndAdmin, async (req
 });
 //update
 productsRouter.put('/:id',upload.single("image"), verifyTokenAndAdmin, async (req:Request, res:Response)=>{
-    console.log(req.file);
-    console.log(req.body)
-
     try{
         let updatedProducts = await Products.findById(req.params.id);
         if(req.file){
@@ -50,7 +44,7 @@ productsRouter.put('/:id',upload.single("image"), verifyTokenAndAdmin, async (re
         }
        let result;
         if(req.file){
-            let fileUrl = req.file!.path.replace(/\\/g, "/");
+            let fileUrl = req.file?.path.replace(/\\/g, "/");
         result = await cloudinary.uploader.upload(fileUrl, {
             upload_preset: "webshop_ts_mern",
             resource_type: "auto",
@@ -69,7 +63,6 @@ productsRouter.put('/:id',upload.single("image"), verifyTokenAndAdmin, async (re
             cloudinary_id: result ? result.public_id : updatedProducts!.cloudinary_id,
             image: result ? result.secure_url : updatedProducts!.image,
         }
-        console.log(updatedData);
         updatedProducts = await Products.findByIdAndUpdate(req.params.id, updatedData, {
             new:true,
         })
@@ -85,7 +78,7 @@ productsRouter.delete('/:id', verifyTokenAndAdmin, async (req:Request, res:Respo
     try{
         let deleteProducts = await Products.findById(req.params.id);
         await cloudinary.uploader.destroy(deleteProducts!.cloudinary_id);
-         await deleteProducts!.remove();
+         await deleteProducts?.remove();
         res.status(200).json("Produkt wurde gelöscht");
     } catch(error){
         res.status(404)
@@ -104,17 +97,7 @@ productsRouter.get('/find/:id', async (req:Request, res:Response)=>{
 });
 //get All
 productsRouter.get('/find/', async (req:Request, res:Response)=>{
-    // const qnew = req.query.new;
-    // const qCategory = req.query.category;
-    try{
-        // let products;
-        // if(qnew){
-        //     products = await Products.find().sort({createdAt:-1}).limit(1);
-        // } else if(qCategory){
-        //     products = await Products.find({categories:{$in:[qCategory]}})
-        // } else{
-        //     products = await Products.find();
-        // }
+        try{
         const allProducts = await Products.find()
         res.status(200).json(allProducts);
     } catch(error){
