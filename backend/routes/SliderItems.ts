@@ -6,10 +6,9 @@ const cloudinary = require('../utils/cloudinary');
 import path from 'path'
 import SliderItems from '../models/sliderItem';
 sliderItemRouter.post('/',upload.single("img"), verifyTokenAndAdmin, async (req:Request, res:Response)=>{
-    console.log(req.file);
-    console.log(req.body);
+    
     let fileUrl = req.file!.path.replace(/\\/g, "/");
-    console.log(fileUrl);
+    
     try{
         const uploadResult = await cloudinary.uploader.upload(fileUrl, {
             upload_preset: "webshop_ts_mern",

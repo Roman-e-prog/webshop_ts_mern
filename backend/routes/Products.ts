@@ -39,6 +39,7 @@ productsRouter.post('/', upload.single('image'), verifyTokenAndAdmin, async (req
 productsRouter.put('/:id',upload.single("image"), verifyTokenAndAdmin, async (req:Request, res:Response)=>{
     try{
         let updatedProducts = await Products.findById(req.params.id);
+        // console.log( "put",updatedProducts);
         if(req.file){
         await cloudinary.uploader.destroy(updatedProducts?.cloudinary_id);
         }
@@ -82,6 +83,7 @@ productsRouter.delete('/:id', verifyTokenAndAdmin, async (req:Request, res:Respo
         res.status(200).json("Produkt wurde gelöscht");
     } catch(error){
         res.status(404)
+        console.log(error);
         throw new Error("Nicht gefunden")
     }
 });
@@ -89,9 +91,11 @@ productsRouter.delete('/:id', verifyTokenAndAdmin, async (req:Request, res:Respo
 productsRouter.get('/find/:id', async (req:Request, res:Response)=>{
     try{
         const products = await Products.findById(req.params.id);
+        console.log("found", products);
         res.status(200).json(products)
     } catch(error){
         res.status(404)
+        console.log(error);
         throw new Error("Nicht gefunden");
     }
 });
@@ -102,6 +106,7 @@ productsRouter.get('/find/', async (req:Request, res:Response)=>{
         res.status(200).json(allProducts);
     } catch(error){
         res.status(404)
+        console.log(error);
         throw new Error("Nicht gefunden");
     }
 })

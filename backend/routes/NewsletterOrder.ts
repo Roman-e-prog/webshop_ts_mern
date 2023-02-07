@@ -15,7 +15,7 @@ newsletterOrderRouter.post('/', async (req:Request, res:Response)=>{
 });
 newsletterOrderRouter.delete('/:id', async (req:Request, res:Response)=>{
     try{
-        const deleteNewsletterOrder = await NewsletterOrder.findByIdAndDelete(req.params.id);
+        await NewsletterOrder.findByIdAndDelete(req.params.id);
         res.status(200).json(`Newsletter ${req.params.id} wurde gelöscht`);
     } catch(error){
         res.status(404)
