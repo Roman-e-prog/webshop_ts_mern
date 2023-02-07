@@ -1,27 +1,17 @@
 import mongoose from "mongoose";
 export interface CartDocument extends mongoose.Document{
-    userId:string;
-    products:[{}];
+    user:object;
+    cartProduct:object;
+    amount:number,
+    quantity:number,
     createdAt: Date;
     updatedAt: Date;
   };
 const CartSchema = new mongoose.Schema<CartDocument>({
-    userId:{type:String, required:true},
-    products:[
-        {
-            productId:{type:String, required:true},
-            image:{type:String, required:true},
-            title:{type:String, required:true},
-            producer:{type:String, required:true},
-            desc:{type:String, required:true},
-            price:{type:String, required:true},
-            currency:{type:String, required:true},
-            size:{type:String, required:true},
-            color:{type:String, required:true},
-            quantity:{type:Number,default:1},
-            
-        }
-    ]
+    user:{type:Object, required:true},
+    cartProduct:{type:Object, required:true},
+    amount:{type:Number, required:true},
+    quantity:{type:Number, required:true},
 },
 {timestamps:true}
 )

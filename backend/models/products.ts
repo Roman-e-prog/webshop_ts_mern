@@ -11,8 +11,6 @@ interface ProductsDocument extends mongoose.Document{
     colors:string[],
     sizes:string[],
     inStock:boolean,
-    createdAt: Date;
-    updatedAt: Date;
 }
 const ProductsSchema = new mongoose.Schema<ProductsDocument>({
     cloudinary_id:{type:String, required:true},

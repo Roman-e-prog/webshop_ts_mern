@@ -1,29 +1,15 @@
 import mongoose from "mongoose";
 export interface OrderDocument extends mongoose.Document{
-    userId:string;
-    products:[string,number];
+    user:object
+    cartproduct:object;
     amount:number;
-    address:object;
-    status:string;
     createdAt: Date;
     updatedAt: Date;
   };
 const OrderSchema = new mongoose.Schema<OrderDocument>({
-    userId:{type:String, required:true},
-    products:[
-        {
-            productId:{
-                type:String,
-            },
-            quantity:{
-                type:String,
-                default:1
-            }
-        }
-    ],
+    user:{type:Object, required:true},
+    cartproduct:{type:Object, required:true},
     amount:{type:Number, required:true},
-    address:{type:Object, required:true},
-    status:{type:String, required:true, default:"pending"}
 },
 {timestamps:true}
 );
