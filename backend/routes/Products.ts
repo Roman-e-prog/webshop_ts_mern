@@ -54,12 +54,12 @@ productsRouter.put('/:id',upload.single("image"), verifyTokenAndAdmin, async (re
         const updatedData = {
             title: req.body.title || updatedProducts!.title,
             producer: req.body.producer || updatedProducts!.producer,
-            categories: JSON.parse(req.body.categories) || updatedProducts!.categories,
+            categories: JSON.parse(JSON.stringify(req.body.categories)) || updatedProducts!.categories,
             desc: req.body.desc || updatedProducts!.desc,
             price: req.body.price || updatedProducts!.price,
             currency: req.body.currency || updatedProducts!.currency,
-            colors: JSON.parse(req.body.colors) || updatedProducts!.colors,
-            sizes: JSON.parse(req.body.sizes) || updatedProducts!.sizes,
+            colors: JSON.parse(JSON.stringify(req.body.colors))|| updatedProducts!.colors,
+            sizes: JSON.parse(JSON.stringify(req.body.sizes)) || updatedProducts!.sizes,
             inStock: req.body.inStock || updatedProducts!.inStock,
             cloudinary_id: result ? result.public_id : updatedProducts!.cloudinary_id,
             image: result ? result.secure_url : updatedProducts!.image,
@@ -91,7 +91,6 @@ productsRouter.delete('/:id', verifyTokenAndAdmin, async (req:Request, res:Respo
 productsRouter.get('/find/:id', async (req:Request, res:Response)=>{
     try{
         const products = await Products.findById(req.params.id);
-        console.log("found", products);
         res.status(200).json(products)
     } catch(error){
         res.status(404)
