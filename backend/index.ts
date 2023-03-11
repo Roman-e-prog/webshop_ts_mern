@@ -51,7 +51,7 @@ routes.use('/api/products', productsRouter);
 routes.use('/api/sliderItem', sliderItemsRouter);
 routes.use('/api/sneakerImage', sneakerImageRouter);
 routes.use('/api/cartdata', cartRouter);
-routes.use('/api/order', orderRouter);
+routes.use('/api/orderdata', orderRouter);
 routes.use('/api/checkout', stripeRouter);
 routes.use('/api/newsletterOrder', newsletterOrderRouter);
 routes.use('/api/wishlist', wishlistRouter);
