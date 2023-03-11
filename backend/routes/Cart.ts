@@ -32,16 +32,38 @@ cartRouter.delete('/:id', verifyTokenAndAuthorization, async (req:Request, res:R
 });
 cartRouter.get('/find/:id', verifyTokenAndAuthorization, async (req:Request, res:Response)=>{
     try{
-        const cart = await Cart.findOne({userId: req.params.userId});
+        const cart = await Cart.findById(req.params.id);
+        console.log("found", cart)
         res.status(200).json(cart);
     }catch(error){
         res.status(403).json("Forbidden");
     }
 });
-cartRouter.get('/', verifyTokenAndAdmin, async (req:Request, res:Response)=>{
+cartRouter.get('/find', verifyTokenAndAdmin, async (req:Request, res:Response)=>{
     try{
         const allCarts = await Cart.find();
         res.status(200).json(allCarts);
+    }catch(error){
+        res.status(404).json("Not found");
+    }
+})
+
+cartRouter.get('/quantity', verifyTokenAndAdmin, async(req:Request,res:Response)=>{
+    try{
+            const allQuantity = await Cart.aggregate([
+                {$project:{ _id: 0, cartProduct: 1 }},
+                {$unwind: "$cartProduct"},
+                {$group:{ _id: {
+                                title:"$cartProduct.title",
+                                producer:"$cartProduct.producer",
+                                size: "$cartProduct.size",
+                                color:"$cartProduct.color",
+                                },
+                                total:{$sum:"$cartProduct.quantity"},
+            }}
+            ])
+            console.log(allQuantity);
+            res.status(200).json(allQuantity);
     }catch(error){
         res.status(404).json("Not found");
     }
