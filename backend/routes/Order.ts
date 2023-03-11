@@ -3,12 +3,13 @@ const orderRouter = Router();
 import Order from "../models/order";
 import {verifyToken, verifyTokenAndAuthorization, verifyTokenAndAdmin} from '../middleware/jwtVerify';
 
-orderRouter.post('/', verifyToken, async (req:Request, res:Response)=>{
+orderRouter.post('/', verifyTokenAndAuthorization, async (req:Request, res:Response)=>{
     const newOrder = new Order(req.body);
     try{
         const savedOrder = await newOrder.save();
         res.status(200).json(savedOrder);
     } catch(error){
+        console.log(error)
         res.status(401).json(error)
     }
 });
@@ -32,13 +33,13 @@ orderRouter.delete('/:id', verifyTokenAndAdmin, async (req:Request, res:Response
 });
 orderRouter.get('/find/:id', verifyTokenAndAuthorization, async (req:Request, res:Response)=>{
     try{
-        const order = await Order.find({userId: req.params.userId});
+        const order = await Order.findById(req.params.id);
         res.status(200).json(order);
     }catch(error){
         res.status(403).json("Forbidden");
     }
 });
-orderRouter.get('/', verifyTokenAndAdmin, async (req:Request, res:Response)=>{
+orderRouter.get('/find', verifyTokenAndAdmin, async (req:Request, res:Response)=>{
     try{
         const allOrders = await Order.find();
         res.status(200).json(allOrders);
@@ -48,24 +49,27 @@ orderRouter.get('/', verifyTokenAndAdmin, async (req:Request, res:Response)=>{
 });
 //Get monthly income
 orderRouter.get('/income', verifyTokenAndAdmin, async (req:Request, res:Response)=>{
-    const date = new Date();
-    const lastMonth = new Date(date.setMonth(date.getMonth()-1));
-    const previousMonth = new Date(new Date().setMonth(lastMonth.getMonth()-1));
-
     try{
         const income = await Order.aggregate([
-            {$match:{createdAt:{$gte: previousMonth}}},
             {$project: {
                 month: {$month: "$createdAt"},
-                sales: "$amount"
+                day:{$dayOfMonth:"$createdAt"},
+                year:{$year:"$createdAt"},
+                sales: "$netto",
             }},
-            {$group: {
-                _id: "$month",
-                total:{$sum: "$sales"},
-            }},
+            {$group:{
+                _id: {
+                    "year":"$year",
+                    "month":"$month",
+                    "day":"$day",  
+            },
+                total:{$sum: "$sales"}
+            }},     
         ]);
+        console.log(income);
         res.status(200).json(income);
     }catch(error){
+        console.log(error)
         res.status(404).json("Not found");
     }
 })
