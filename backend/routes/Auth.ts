@@ -1,12 +1,15 @@
 import { Router, Request, Response } from "express";
 const authRouter = Router();
-const CryptoJS = require('crypto-js');
 import * as jwt from 'jsonwebtoken';
 import User from "../models/user";
 import bcrypt from 'bcrypt';
 
 //register
 authRouter.post('/register', async (request:Request, response:Response)=>{
+    let user =  await User.findOne({email:request.body.username});
+     if(user){
+        return response.status(404).json("Dieser user ist bereits angelegt")
+    }
     const salt = bcrypt.genSaltSync(10);
     const hash = bcrypt.hashSync(request.body.password, salt);
     const newUser = new User({
@@ -19,10 +22,6 @@ authRouter.post('/register', async (request:Request, response:Response)=>{
         plz:request.body.plz,
         city:request.body.city,
         password: hash
-        // CryptoJS.AES.encrypt(
-        //     request.body.password,
-        //     process.env.PASS_SEC
-        // ).toString(),
     });
     try{
         const savedUser = await newUser.save();
@@ -38,7 +37,7 @@ authRouter.post('/login', async (request:Request, response:Response)=>{
     let sec:string = process.env.JWT_SEC as string;
     try{
         const user = await User.findOne({username:request.body.username});
-
+        console.log(user);
         if(!user){
             return response.status(401).json("Falsche Eingabe");
         }
