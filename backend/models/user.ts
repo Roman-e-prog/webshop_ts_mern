@@ -19,7 +19,7 @@ export interface UserDocument extends mongoose.Document{
 const UserSchema = new mongoose.Schema<UserDocument>({
     vorname:{type:String, required:true},
     nachname:{type:String, required:true},
-    username:{type:String, required:true },
+    username:{type:String, unique:true, required:true },
     email:{type:String, required:true },
     street:{type:String, required:true },
     number:{type:String, required:true },
