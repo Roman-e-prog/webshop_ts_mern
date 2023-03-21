@@ -29,6 +29,7 @@ import stripeRouter from './routes/Stripe';
 import newsletterOrderRouter from './routes/NewsletterOrder';
 import wishlistRouter from './routes/Wishlist';
 import messagesRouter from './routes/Messages';
+
 const routes = Router();
 dbConnect();
 app.use(cors());
