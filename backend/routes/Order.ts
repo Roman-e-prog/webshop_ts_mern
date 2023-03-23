@@ -66,7 +66,7 @@ orderRouter.get('/income', verifyTokenAndAdmin, async (req:Request, res:Response
                 total:{$sum: "$sales"}
             }},     
         ]);
-        console.log(income);
+        
         res.status(200).json(income);
     }catch(error){
         console.log(error)

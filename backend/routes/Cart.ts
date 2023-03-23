@@ -33,7 +33,6 @@ cartRouter.delete('/:id', verifyTokenAndAuthorization, async (req:Request, res:R
 cartRouter.get('/find/:id', verifyTokenAndAuthorization, async (req:Request, res:Response)=>{
     try{
         const cart = await Cart.findById(req.params.id);
-        console.log("found", cart)
         res.status(200).json(cart);
     }catch(error){
         res.status(403).json("Forbidden");

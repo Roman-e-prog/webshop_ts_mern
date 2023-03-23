@@ -37,7 +37,6 @@ authRouter.post('/login', async (request:Request, response:Response)=>{
     let sec:string = process.env.JWT_SEC as string;
     try{
         const user = await User.findOne({username:request.body.username});
-        console.log(user);
         if(!user){
             return response.status(401).json("Falsche Eingabe");
         }

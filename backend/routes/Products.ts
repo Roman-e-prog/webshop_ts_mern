@@ -39,7 +39,7 @@ productsRouter.post('/', upload.single('image'), verifyTokenAndAdmin, async (req
 productsRouter.put('/:id',upload.single("image"), verifyTokenAndAdmin, async (req:Request, res:Response)=>{
     try{
         let updatedProducts = await Products.findById(req.params.id);
-        // console.log( "put",updatedProducts);
+        
         if(req.file){
         await cloudinary.uploader.destroy(updatedProducts?.cloudinary_id);
         }

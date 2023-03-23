@@ -32,9 +32,6 @@ sliderItemRouter.post('/',upload.single("img"), verifyTokenAndAdmin, async (req:
 });
 //update
 sliderItemRouter.put('/:id',upload.single("img"), verifyTokenAndAdmin, async (req:Request, res:Response)=>{
-    console.log(req.file);
-    console.log(req.body)
-
     try{
         let updatedSliderItems = await SliderItems.findById(req.params.id);
         if(req.file){
