@@ -6,8 +6,8 @@ import bcrypt from 'bcrypt';
 import PasswordReset from "../models/passwordReset";
 const nodemailer = require('nodemailer');
 const transporter = nodemailer.createTransport({
-    host:'0.0.0.0',
-    port: 1025,
+    host:'smtp.googlemail.com',
+    port: 465,
 })
 import {verifyToken, verifyTokenAndAuthorization, verifyTokenAndAdmin} from '../middleware/jwtVerify';
 
