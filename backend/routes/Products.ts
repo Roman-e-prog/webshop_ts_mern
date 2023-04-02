@@ -24,6 +24,7 @@ productsRouter.post('/', upload.single('image'), verifyTokenAndAdmin, async (req
             colors:JSON.parse(req.body.colors).split(' '),
             sizes: JSON.parse(req.body.sizes).split(' '),
             inStock: req.body.inStock,
+            sale:req.body.sale,
             image: uploadResult.secure_url,
 
         })
@@ -61,6 +62,7 @@ productsRouter.put('/:id',upload.single("image"), verifyTokenAndAdmin, async (re
             colors: JSON.parse(req.body.colors) || updatedProducts!.colors,
             sizes: JSON.parse(req.body.sizes) || updatedProducts!.sizes,
             inStock: req.body.inStock || updatedProducts!.inStock,
+            sale: req.body.sale || updatedProducts!.sale,
             cloudinary_id: result ? result.public_id : updatedProducts!.cloudinary_id,
             image: result ? result.secure_url : updatedProducts!.image,
         }
