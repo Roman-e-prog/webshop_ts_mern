@@ -11,6 +11,7 @@ interface ProductsDocument extends mongoose.Document{
     colors:string[],
     sizes:string[],
     inStock:boolean,
+    sale:boolean,
 }
 const ProductsSchema = new mongoose.Schema<ProductsDocument>({
     cloudinary_id:{type:String, required:true},
@@ -23,6 +24,7 @@ const ProductsSchema = new mongoose.Schema<ProductsDocument>({
     colors:{type:[{type:String}], required:true},
     sizes:{type:[{type:String}], required:true},
     inStock:{type:Boolean, required:true, default:true},
+    sale:{type:Boolean, default:false},
     image:{type:String, required:true},
 },
 {timestamps:true}
