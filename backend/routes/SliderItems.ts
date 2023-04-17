@@ -51,8 +51,10 @@ sliderItemRouter.put('/:id',upload.single("img"), verifyTokenAndAdmin, async (re
             cloudinary_id: result ? result.public_id : updatedSliderItems!.cloudinary_id,
             img: result ? result.secure_url : updatedSliderItems!.img,
         }
-        
-        res.status(200).json(updatedSliderItem);
+        updatedSliderItems = await SliderItems.findByIdAndUpdate(req.params.id, updatedSliderItem, {
+            new:true,
+        })
+        res.status(200).json(updatedSliderItems);
     } catch(error){
         res.status(404)
         throw new Error('Nicht gefunden')

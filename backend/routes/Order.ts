@@ -3,7 +3,7 @@ const orderRouter = Router();
 import Order from "../models/order";
 import {verifyToken, verifyTokenAndAuthorization, verifyTokenAndAdmin} from '../middleware/jwtVerify';
 
-orderRouter.post('/', verifyTokenAndAuthorization, async (req:Request, res:Response)=>{
+orderRouter.post('/', verifyToken, async (req:Request, res:Response)=>{
     const newOrder = new Order(req.body);
     try{
         const savedOrder = await newOrder.save();
@@ -36,6 +36,7 @@ orderRouter.get('/find/:id', verifyTokenAndAuthorization, async (req:Request, re
         const order = await Order.findById(req.params.id);
         res.status(200).json(order);
     }catch(error){
+        console.log(error)
         res.status(403).json("Forbidden");
     }
 });
@@ -71,6 +72,25 @@ orderRouter.get('/income', verifyTokenAndAdmin, async (req:Request, res:Response
     }catch(error){
         console.log(error)
         res.status(404).json("Not found");
+    }
+})
+orderRouter.get('/townAnalyse', async (req:Request, res:Response)=>{
+    try{
+        const townAnalyse =  await Order.aggregate([
+            {$group:{
+                _id:{
+                    city:"$user.city",
+                    plz:"$user.plz",
+                }, 
+                totalNetto:{$sum: "$netto"},
+                userCount:{$sum: 1}
+            }}
+        ])
+        res.status(200).json(townAnalyse);
+    } catch(error){
+        res.status(404)
+        console.log(error)
+        throw new Error("Keine Datan gefunden")
     }
 })
 export default orderRouter;

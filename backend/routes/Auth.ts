@@ -6,10 +6,6 @@ import bcrypt from 'bcrypt';
 
 //register
 authRouter.post('/register', async (request:Request, response:Response)=>{
-    let user =  await User.findOne({email:request.body.username});
-     if(user){
-        return response.status(404).json("Dieser user ist bereits angelegt")
-    }
     const salt = bcrypt.genSaltSync(10);
     const hash = bcrypt.hashSync(request.body.password, salt);
     const newUser = new User({
@@ -60,6 +56,7 @@ authRouter.post('/login', async (request:Request, response:Response)=>{
         }
     } catch(error:any){
         response.status(401)
+        console.log(error)
         throw new Error(error)
     }
 });

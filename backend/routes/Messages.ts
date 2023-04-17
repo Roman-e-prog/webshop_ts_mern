@@ -49,6 +49,7 @@ messagesRouter.get('/find/', verifyTokenAndAdmin, async (req:Request, res:Respon
         res.status(200).json(OneUsermessage)
     }catch(error){
         res.status(404)
+        console.log(error)
         throw new Error("Not found")
     }
 })

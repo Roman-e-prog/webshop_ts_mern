@@ -5,10 +5,24 @@ const randomToken = require('random-token');
 import bcrypt from 'bcrypt';
 import PasswordReset from "../models/passwordReset";
 const nodemailer = require('nodemailer');
-const transporter = nodemailer.createTransport({
-    host:'smtp.googlemail.com',
-    port: 465,
-})
+// const transporter = nodemailer.createTransport({
+//     host: 'smtp.gmail.com',
+//     port: 465,
+//     secure: true,
+//     auth: {
+//         user: process.env.TESTMAIL,
+//         pass: process.env.TESTMAIL_PASSWORD,
+//     },
+//     service: 'gmail',
+//     auth: {
+//         type: 'OAuth2',
+//         user: process.env.TESTMAIL,
+//         clientId: process.env.OAUTH_CLIENT_ID,
+//         clientSecret: process.env.OAUTH_CLIENT_KEY,
+//         refreshToken: 'YOUR_REFRESH_TOKEN',
+//         accessToken: 'YOUR_ACCESS_TOKEN'
+//     }
+// })
 import {verifyToken, verifyTokenAndAuthorization, verifyTokenAndAdmin} from '../middleware/jwtVerify';
 
 userRouter.put('/:id', verifyTokenAndAuthorization, async (req:Request, res:Response)=>{
@@ -59,12 +73,12 @@ userRouter.post('/forgot', async (req:Request, res:Response)=>{
         await newPassword.save();
 
         const url = `http://localhost:3000/reset/${token}`
-        await transporter.sendMail({
-            from:'admin@example.com',
-            to:email,
-            subject:'Reset your password',
-            html: `Klicken Sie<a href="${url}">hier</a> um Ihr Passwort zu resetten`
-        })
+        // await transporter.sendMail({
+        //     from:'admin@example.com',
+        //     to:email,
+        //     subject:'Reset your password',
+        //     html: `Klicken Sie<a href="${url}">hier</a> um Ihr Passwort zu resetten`
+        // })
         res.status(200).json({
             message:"Rufen Sie bitte Ihre E-mail auf"
         })
@@ -96,7 +110,7 @@ userRouter.post('/reset', async (req:Request, res:Response)=>{
 //stats user per month
 userRouter.get('/stats', verifyTokenAndAdmin, async (req:Request, res:Response)=>{
     const date = new Date();
-    const lastyear = new Date(date.setFullYear(date.getFullYear()-1));
+    let lastyear = date.setFullYear(date.getFullYear()-1);
     try{
         const data = await User.aggregate([
             {$match: {createdAt: {$gte: lastyear } } },
@@ -105,14 +119,20 @@ userRouter.get('/stats', verifyTokenAndAdmin, async (req:Request, res:Response)=
                     month:{ $month:"$createdAt"},
                 },
             },
-            {$group:
-                {_id: "$month", 
+            {$group:{
+                _id: "$month", 
                 total:{$sum:1}
                 },
             },
+            {
+                $sort:{
+                    _id: 1
+                }
+            }
         ]);
         res.status(200).json(data);
     } catch(error){
+        console.log(error)
         res.status(403).json(error);
     }
 })

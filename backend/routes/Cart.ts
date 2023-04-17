@@ -9,6 +9,7 @@ cartRouter.post('/', verifyToken, async (req:Request, res:Response)=>{
         const savedCart = await newCart.save();
         res.status(200).json(savedCart);
     } catch(error){
+        console.log(error);
         res.status(401).json(error)
     }
 });
@@ -43,6 +44,7 @@ cartRouter.get('/find', verifyTokenAndAdmin, async (req:Request, res:Response)=>
         const allCarts = await Cart.find();
         res.status(200).json(allCarts);
     }catch(error){
+        console.log(error)
         res.status(404).json("Not found");
     }
 })
@@ -61,9 +63,9 @@ cartRouter.get('/quantity', verifyTokenAndAdmin, async(req:Request,res:Response)
                                 total:{$sum:"$cartProduct.quantity"},
             }}
             ])
-            console.log(allQuantity);
             res.status(200).json(allQuantity);
     }catch(error){
+        console.log(error)
         res.status(404).json("Not found");
     }
 })

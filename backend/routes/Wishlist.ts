@@ -1,9 +1,9 @@
 import {Router, Request, Response} from 'express';
-import { verifyTokenAndAuthorization } from '../middleware/jwtVerify';
+import { verifyToken } from '../middleware/jwtVerify';
 import Wishlist from '../models/wishlist';
 const wishlistRouter = Router();
 
-wishlistRouter.post('/', verifyTokenAndAuthorization, async (req:Request, res:Response)=>{
+wishlistRouter.post('/', verifyToken, async (req:Request, res:Response)=>{
     const newWishlist = new Wishlist(req.body);
     try{
         const savedWishlist = await newWishlist.save();
@@ -12,11 +12,12 @@ wishlistRouter.post('/', verifyTokenAndAuthorization, async (req:Request, res:Re
 
     } catch(error){
         res.status(403)
-        throw new Error('Action forbidden')
+        console.log(error);
+        throw new Error('Aktion verboten')
     }
 })
 
-wishlistRouter.delete('/:id', verifyTokenAndAuthorization, async (req:Request, res:Response)=>{
+wishlistRouter.delete('/:id', verifyToken, async (req:Request, res:Response)=>{
     try{
          await Wishlist.findByIdAndDelete(req.params.id)
 
@@ -24,6 +25,7 @@ wishlistRouter.delete('/:id', verifyTokenAndAuthorization, async (req:Request, r
 
     } catch(error){
         res.status(404)
+        console.log(error);
         throw new Error('Wishlist not found')
     }
 })
