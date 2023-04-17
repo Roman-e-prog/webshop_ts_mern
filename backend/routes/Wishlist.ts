@@ -12,7 +12,6 @@ wishlistRouter.post('/', verifyToken, async (req:Request, res:Response)=>{
 
     } catch(error){
         res.status(403)
-        console.log(error);
         throw new Error('Aktion verboten')
     }
 })
@@ -25,7 +24,6 @@ wishlistRouter.delete('/:id', verifyToken, async (req:Request, res:Response)=>{
 
     } catch(error){
         res.status(404)
-        console.log(error);
         throw new Error('Wishlist not found')
     }
 })
@@ -36,7 +34,6 @@ wishlistRouter.get('/find', async (req:Request, res:Response)=>{
 
     } catch(error){
         res.status(404)
-        console.log(error)
         throw new Error('Wishlist not found')
     }
 })

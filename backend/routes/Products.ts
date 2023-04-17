@@ -32,7 +32,6 @@ productsRouter.post('/', upload.single('image'), verifyTokenAndAdmin, async (req
         res.status(200).json(savedproducts);
     } catch(error){
         res.status(403)
-        console.log(error);
         throw new Error("Action failed");
     }
 });
@@ -72,7 +71,6 @@ productsRouter.put('/:id',upload.single("image"), verifyTokenAndAdmin, async (re
         res.status(200).json(updatedProducts);
     } catch(error){
         res.status(404)
-        console.log(error);
         throw new Error('Not found')
     }
 });
@@ -85,7 +83,6 @@ productsRouter.delete('/:id', verifyTokenAndAdmin, async (req:Request, res:Respo
         res.status(200).json("Produkt wurde gelöscht");
     } catch(error){
         res.status(404)
-        console.log(error);
         throw new Error("Nicht gefunden")
     }
 });
@@ -96,7 +93,6 @@ productsRouter.get('/find/:id', async (req:Request, res:Response)=>{
         res.status(200).json(products)
     } catch(error){
         res.status(404)
-        console.log(error);
         throw new Error("Nicht gefunden");
     }
 });
@@ -107,7 +103,6 @@ productsRouter.get('/find/', async (req:Request, res:Response)=>{
         res.status(200).json(allProducts);
     } catch(error){
         res.status(404)
-        console.log(error);
         throw new Error("Nicht gefunden");
     }
 })

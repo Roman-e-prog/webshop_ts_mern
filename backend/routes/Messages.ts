@@ -9,7 +9,6 @@ messagesRouter.post('/', verifyTokenAndAdmin, async (req:Request, res:Response)=
         res.status(200).json(savedUserMessage);
     } catch(error){
         res.status(403)
-        console.log(error);
         throw new Error("Action failed");
     }
 });
@@ -39,7 +38,6 @@ messagesRouter.get('/find/:id', verifyTokenAndAdmin, async (req:Request, res:Res
         res.status(200).json(OneUsermessage)
     }catch(error){
         res.status(404)
-        console.log(error);
         throw new Error("Not found")
     }
 })
@@ -49,7 +47,6 @@ messagesRouter.get('/find/', verifyTokenAndAdmin, async (req:Request, res:Respon
         res.status(200).json(OneUsermessage)
     }catch(error){
         res.status(404)
-        console.log(error)
         throw new Error("Not found")
     }
 })

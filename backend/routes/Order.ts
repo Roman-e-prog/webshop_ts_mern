@@ -9,7 +9,6 @@ orderRouter.post('/', verifyToken, async (req:Request, res:Response)=>{
         const savedOrder = await newOrder.save();
         res.status(200).json(savedOrder);
     } catch(error){
-        console.log(error)
         res.status(401).json(error)
     }
 });
@@ -36,7 +35,6 @@ orderRouter.get('/find/:id', verifyTokenAndAuthorization, async (req:Request, re
         const order = await Order.findById(req.params.id);
         res.status(200).json(order);
     }catch(error){
-        console.log(error)
         res.status(403).json("Forbidden");
     }
 });
@@ -70,7 +68,6 @@ orderRouter.get('/income', verifyTokenAndAdmin, async (req:Request, res:Response
         
         res.status(200).json(income);
     }catch(error){
-        console.log(error)
         res.status(404).json("Not found");
     }
 })

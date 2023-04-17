@@ -26,7 +26,6 @@ sliderItemRouter.post('/',upload.single("img"), verifyTokenAndAdmin, async (req:
         res.status(200).json(savedsliderItem);
     } catch(error){
         res.status(403)
-        console.log(error);
         throw new Error("Action failed");
     }
 });
@@ -69,7 +68,6 @@ sliderItemRouter.delete('/:id', verifyTokenAndAdmin, async (req:Request, res:Res
         res.status(200).json("SliderItem wurde gelöscht");
     } catch(error){
         res.status(404)
-        console.log(error);
         throw new Error("Nicht gefunden")
     }
 });

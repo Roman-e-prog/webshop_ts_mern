@@ -56,7 +56,6 @@ authRouter.post('/login', async (request:Request, response:Response)=>{
         }
     } catch(error:any){
         response.status(401)
-        console.log(error)
         throw new Error(error)
     }
 });

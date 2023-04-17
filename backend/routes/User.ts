@@ -107,35 +107,7 @@ userRouter.post('/reset', async (req:Request, res:Response)=>{
     user!.save();
     res.status(200).json("Passwort wurde erfolgreich geändert");
 })
-//stats user per month
-userRouter.get('/stats', verifyTokenAndAdmin, async (req:Request, res:Response)=>{
-    const date = new Date();
-    let lastyear = date.setFullYear(date.getFullYear()-1);
-    try{
-        const data = await User.aggregate([
-            {$match: {createdAt: {$gte: lastyear } } },
-            {
-                $project:{
-                    month:{ $month:"$createdAt"},
-                },
-            },
-            {$group:{
-                _id: "$month", 
-                total:{$sum:1}
-                },
-            },
-            {
-                $sort:{
-                    _id: 1
-                }
-            }
-        ]);
-        res.status(200).json(data);
-    } catch(error){
-        console.log(error)
-        res.status(403).json(error);
-    }
-})
+
 
 export default userRouter;
 
