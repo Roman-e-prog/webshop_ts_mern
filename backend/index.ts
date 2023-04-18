@@ -1,4 +1,5 @@
 const express = require('express');
+import { Request, Response } from 'express';
 import { Router } from 'express';
 import * as dotenv from 'dotenv';
 dotenv.config({path:__dirname+'/.env'});
@@ -40,7 +41,28 @@ routes.use('/api/newsletterOrder', newsletterOrderRouter);
 routes.use('/api/wishlist', wishlistRouter);
 routes.use('/api/messages', messagesRouter);
 app.use(routes);
-app.use(express.static(path.resolve(process.cwd(),'admin/public/' )))
+app.use(express.static(path.resolve(process.cwd(),'admin/public/' )));
+// Serve frontend
+if (process.env.NODE_ENV === 'production') {
+    app.use('/frontend1', express.static(path.join(__dirname, '../frontend/build')));
+
+    app.get('/frontend/*', (req:Request, res:Response) =>
+      res.sendFile(
+        path.resolve(__dirname, '../', 'frontend', 'build', 'index.html')
+      )
+    );
+    
+    // Serve admin
+    app.use('/admin', express.static(path.join(__dirname, '../admin/build')));
+    
+    app.get('/admin/*', (req:Request, res:Response) =>
+      res.sendFile(
+        path.resolve(__dirname, '../', 'admin', 'build', 'index.html')
+      )
+    );
+  } else {
+    app.get('/', (req:Request, res:Response) => res.send('Bitte in der .env auf production setzen'));
+  }
 app.listen(port, ()=>{
     console.log(`Server is running on port: ${port}`)
 });

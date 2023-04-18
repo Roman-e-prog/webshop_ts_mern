@@ -5,6 +5,10 @@ const randomToken = require('random-token');
 import bcrypt from 'bcrypt';
 import PasswordReset from "../models/passwordReset";
 const nodemailer = require('nodemailer');
+const transporter = nodemailer.createTransport({
+    host: '0.0.0.0',
+    port:   1025,
+})
 // const transporter = nodemailer.createTransport({
 //     host: 'smtp.gmail.com',
 //     port: 465,
@@ -73,12 +77,12 @@ userRouter.post('/forgot', async (req:Request, res:Response)=>{
         await newPassword.save();
 
         const url = `http://localhost:3000/reset/${token}`
-        // await transporter.sendMail({
-        //     from:'admin@example.com',
-        //     to:email,
-        //     subject:'Reset your password',
-        //     html: `Klicken Sie<a href="${url}">hier</a> um Ihr Passwort zu resetten`
-        // })
+        await transporter.sendMail({
+            from:'admin@example.com',
+            to:email,
+            subject:'Reset your password',
+            html: `Klicken Sie<a href="${url}"> hier</a> um Ihr Passwort zu resetten`
+        })
         res.status(200).json({
             message:"Rufen Sie bitte Ihre E-mail auf"
         })
