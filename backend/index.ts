@@ -44,7 +44,7 @@ app.use(routes);
 app.use(express.static(path.resolve(process.cwd(),'admin/public/' )));
 // Serve frontend
 if (process.env.NODE_ENV === 'production') {
-    app.use('/frontend1', express.static(path.join(__dirname, '../frontend/build')));
+    app.use('/frontend', express.static(path.join(__dirname, '../frontend/build')));
 
     app.get('/frontend/*', (req:Request, res:Response) =>
       res.sendFile(
